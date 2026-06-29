@@ -1,12 +1,31 @@
 # UI_CHARTS_MIGRATION_SCOPE.md
 
-Status: approved scope commit, amended with data dependency preconditions  
+Status: approved scope commit, amended with data pre-port gate  
 Repo in scope: `Ventusltd/gb-electricity-ui`  
 Reference repo: `Ventusltd/globalgrid2050`  
 Governance repo: `Ventusltd/globalgrid2050-hompage`  
 Rule: scope first, audit second, fire third
 
-## 0. Data dependency precondition before chart migration
+## 0. Pre-port rule: data must sit clean before charts move
+
+The data dependencies must be resolved before the old charts are ported forward. The project order is: make the data sit clean, audited and documented first; then bring the chart structure across; then wire charts only after the upstream data products have proof.
+
+This prevents the UI repo from becoming another monolith, another hidden data contract, or a chart shell that looks correct while sitting on unproven data.
+
+Before chart porting proceeds beyond scope and audit, resolve these upstream blockers:
+
+```text
+1. data-gb-electricity: prove exact chart dependencies for FUELINST, FUELHH and prices.
+2. data-gb-electricity: create any missing derived browser/rollup products needed by the charts.
+3. data-interconnectors: write contract, source register, audit and apply clean Parquet for named interconnector flows.
+4. PVLive solar: decide whether it belongs in data-gb-electricity, a separate solar data repo, or a deferred/no-data chart state.
+5. Frequency, carbon, oil, road fuel and EV feeds: either scope separate data products or leave those panels as no-data structure in the first UI copy.
+6. Only after the data products are proven should gb-electricity-ui receive live data wiring.
+```
+
+The UI repo must consume data products that already sit clean. It must not port charts first and then retrofit data underneath them. Data before charts remains the governing rule.
+
+## 0A. Data dependency precondition before chart migration
 
 Charts must not be treated as ready for data wiring until the upstream data dependencies are updated, inventoried and proven.
 
